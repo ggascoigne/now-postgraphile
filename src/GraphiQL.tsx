@@ -7,7 +7,7 @@ import GraphiQLExplorer from 'graphiql-explorer'
 import { GraphQLSchema, buildClientSchema, getIntrospectionQuery, parse } from 'graphql'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-const API_ROOT = process.env.REACT_APP_API_ROOT || window.location.origin + '/graphql'
+const API_ROOT = process.env.REACT_APP_API_ROOT || window.location.origin + '/api/graphql'
 
 export const useStyles = makeStyles(
   createStyles({
