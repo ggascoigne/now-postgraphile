@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from 'express'
 import { postgraphile } from 'postgraphile'
 
 import { combineMiddlewares } from './_combineMiddlewares'
-import { getConnectionString, getSchemas } from './_shared/config'
-import { options } from './_shared/postgraphileOptions'
+import { getConnectionString, getSchemas } from '../shared/config'
+import { options } from '../shared/postgraphileOptions'
 
 const app = combineMiddlewares([
   /*
@@ -33,7 +33,7 @@ const app = combineMiddlewares([
   },
   postgraphile(getConnectionString(), getSchemas(), {
     ...options,
-    readCache: `${__dirname}/_shared/postgraphile.cache`,
+    readCache: `${__dirname}/../shared/postgraphile.cache`,
   }),
 ])
 
