@@ -2,9 +2,9 @@ import cors from 'cors'
 import { NextFunction, Request, Response } from 'express'
 import { postgraphile } from 'postgraphile'
 
-import { combineMiddlewares } from './_combineMiddlewares'
-import { getConnectionString, getSchemas } from '../shared/config'
+import { getPool, getSchemas } from '../shared/config'
 import { options } from '../shared/postgraphileOptions'
+import { combineMiddlewares } from './_combineMiddlewares'
 
 const app = combineMiddlewares([
   /*
@@ -31,7 +31,7 @@ const app = combineMiddlewares([
     }
     next()
   },
-  postgraphile(getConnectionString(), getSchemas(), {
+  postgraphile(getPool(`${__dirname}/../shared/`), getSchemas(), {
     ...options,
     readCache: `${__dirname}/../shared/postgraphile.cache`,
   }),

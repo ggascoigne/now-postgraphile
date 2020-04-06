@@ -1,24 +1,37 @@
-// const path = require('path')
-// const fs = require('fs')
-// // look for a .env file that is named after the NODE_ENV, if it doesn't exist just use the default ".env" file
-// const nodeEnv = process.env.NODE_ENV || 'development'
-// const potentialEnvFile = path.resolve(process.cwd(), `.env.${nodeEnv}`)
-// const envFile = fs.existsSync(potentialEnvFile) ? potentialEnvFile : path.resolve(process.cwd(), '.env')
-// require('dotenv').config({ path: envFile })
+const { Pool } = require('pg')
+const fs = require('fs')
+
+process.env.NODE_ENV !== 'production' && require('dotenv').config()
 
 exports.getSchemas = () => {
   return process.env.DATABASE_SCHEMAS ? process.env.DATABASE_SCHEMAS.split(',') : ['public']
 }
 
-exports.getConnectionString = () => {
+exports.getPool = (pathToRoot = './') => {
   const {
     DATABASE_HOST: host,
     DATABASE_NAME: database,
-    DATABASE_USER: username,
+    DATABASE_USER: user,
     DATABASE_PASSWORD: password = '',
     DATABASE_PORT: port,
     DATABASE_SSL: ssl = false,
+    DATABASE_SSL_CERT: database_ssl_cert = '',
   } = process.env
 
-  return `postgres://${username}:${password}@${host}:${port}/${database}${ssl ? '?sqlmode=require&ssl=1' : ''}`
+  const sslChunk = ssl ? `?sslmode=verify-full&ssl=1&sslrootcert=${database_ssl_cert}` : ''
+  console.log(`using: postgres://${user}:${password && '*****'}@${host}:${port}/${database}${sslChunk}`)
+  return new Pool({
+    user,
+    host,
+    database,
+    password,
+    port,
+    ssl: ssl
+      ? {
+          rejectUnauthorized: true,
+          sslmode: 'verify-all',
+          ca: fs.readFileSync(pathToRoot + database_ssl_cert).toString(),
+        }
+      : false,
+  })
 }

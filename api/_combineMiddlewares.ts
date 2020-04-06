@@ -5,7 +5,7 @@
  * All but the final middleware must be a simple middleware that definitely
  * calls next().
  */
-import { RequestHandler, Request, Response } from 'express'
+import { Request, RequestHandler, Response } from 'express'
 
 export function combineMiddlewares(middlewares: Array<RequestHandler>) {
   return middlewares.reduce(

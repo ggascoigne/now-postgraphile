@@ -1,17 +1,14 @@
-const { Pool } = require('pg')
 const { createPostGraphileSchema } = require('postgraphile')
 
 // This script is called from scripts/generate-cache
-const { getConnectionString, getSchemas } = require('./config')
+const { getSchemas, getPool } = require('./config')
 const { options } = require('./postgraphileOptions')
 
 async function main() {
-  const pgPool = new Pool({
-    connectionString: getConnectionString(),
-  })
+  const pgPool = getPool('./shared/')
   await createPostGraphileSchema(pgPool, getSchemas(), {
     ...options,
-    writeCache: `${__dirname}/api/_shared/postgraphile.cache`,
+    writeCache: `${__dirname}/postgraphile.cache`,
   })
   await pgPool.end()
 }
