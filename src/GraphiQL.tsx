@@ -25,6 +25,17 @@ export const useStyles = makeStyles(
     '@global': {
       '.graphiql-explorer-root': {
         overflow: 'unset !important',
+        padding: '0 !important',
+      },
+      '.graphiql-explorer-root > :first-child': {
+        padding: '8px 8px 0 8px',
+        overflowX: 'hidden !important',
+      },
+      '.graphiql-explorer-root > :nth-child(2)': {
+        padding: '0px 8px 0 8px',
+      },
+      '.graphiql-container .execute-button:focus': {
+        outline: 0,
       },
       '.graphiql-container .historyPaneWrap': {
         width: '300px !important',
@@ -46,7 +57,15 @@ const graphQLFetcher = (jwtToken?: string) => (graphQLParams: any) =>
           'Content-Type': 'application/json',
         },
     body: JSON.stringify(graphQLParams),
-  }).then((response) => response.json())
+  })
+    .then((response) => response.text())
+    .then((responseBody) => {
+      try {
+        return JSON.parse(responseBody)
+      } catch (e) {
+        return responseBody
+      }
+    })
 
 type Props = { auth?: { jwtToken?: string } }
 
