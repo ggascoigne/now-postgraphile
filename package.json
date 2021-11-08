@@ -9,7 +9,7 @@
     "@now/node": "^1.5.0",
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
-    "graphiql": "^0.17.5",
+    "graphiql": "^1.4.7",
     "graphiql-explorer": "^0.5.1",
     "graphql": "14.6.0",
     "pg": "^7.18.2",
